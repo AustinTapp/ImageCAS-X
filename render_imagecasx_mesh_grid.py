@@ -224,6 +224,19 @@ def build_montage(render_map: Dict[str, Dict[str, Path]], cases: List[str], mode
     canvas.save(out_path)
 
 
+def labels_for_model(model_name: str, global_labels: Optional[List[int]]):
+    """Choose label selection rules for each model folder.
+
+    Global --labels takes precedence. Otherwise, use all nonzero voxels except
+    for nnunetML, where only label 9 should be meshed/rendered.
+    """
+    if global_labels:
+        return global_labels
+    if model_name.lower() == 'nnunetml':
+        return [9]
+    return None
+
+
 def discover_predictions(results_root: Path):
     model_dirs = [p for p in results_root.iterdir() if p.is_dir()]
     ignore = {'meshes', 'renders', 'grids'}
@@ -294,8 +307,10 @@ def main():
 
             print(f'[proc] {model} / {case}')
             _, arr, spacing_xyz, origin_xyz, direction = load_segmentation(pred_path)
-            if args.labels:
-                mask = np.isin(arr, args.labels)
+            active_labels = labels_for_model(model, args.labels)
+            if active_labels:
+                mask = np.isin(arr, active_labels)
+                print(f'  -> using labels {active_labels}')
             else:
                 mask = arr > 0
 
@@ -318,7 +333,9 @@ def main():
 
             save_mesh(mesh, mesh_out)
             render_mesh(mesh, render_out, size=tuple(args.image_size))
-            annotated = annotate_image(render_out, header=model, footer=case, font_size=args.font_size)
+            # Avoid duplicate text at the top of each tile because the montage
+            # already has column headers for model names.
+            annotated = annotate_image(render_out, header='', footer=case, font_size=args.font_size)
             annotated.save(render_out)
             render_map[case][model] = render_out
 
