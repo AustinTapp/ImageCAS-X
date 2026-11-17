@@ -27,7 +27,6 @@
 - [Multi-Step Methods](#multi-step-methods)
 - [Citation](#citation)
 
-
 ## Highlights
 
 * New label set of the coronary vessel lumen and coronary segments, alongside centerlines and mesh surfaces, for 800 CCTA scans of the publicly available ImageCAS cohort.
