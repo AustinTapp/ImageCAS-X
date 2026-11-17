@@ -72,9 +72,13 @@ def branch_assignment(mask, branch_masks, affine):
     for branch in BRANCHES:
         support = np.argwhere(branch_masks[branch] > 0)
         if not len(support):
-            raise ValueError(f"Empty evaluation branch: {branch}")
+            distances.append(np.full(len(coords),np.inf))
+            continue
         distances.append(cKDTree(support*spacing).query(coords*spacing,workers=1)[0])
-    return np.argmin(distances,axis=0),coords
+    distances=np.asarray(distances)
+    assigned=np.argmin(distances,axis=0)
+    assigned[~np.isfinite(distances.min(axis=0))]=-1
+    return assigned,coords
 
 
 def _csv(path, rows):
@@ -148,6 +152,7 @@ def evaluate(manifest, partition, predictions, out, *, surface_tolerance=1., les
     if not selected:
         raise ValueError("No independent assessment patients remain.")
     rows,lesion_rows = [],[]
+    empty_reference_branches=[]
     classes = {"multiclass":((1,"lumen"),(2,"plaque")),"lumen":((1,"lumen"),),"plaque":((1,"plaque"),)}[task]
     for case,row in selected:
         ref = nib.load(row["image"])
@@ -170,6 +175,8 @@ def evaluate(manifest, partition, predictions, out, *, surface_tolerance=1., les
             raise ValueError(f"Labels extend outside sampling coverage: {case}")
         masks = branch_arrays(row,ref)
         assigned,coords = branch_assignment(pred > 0,masks,ref.affine)
+        empty_reference_branches.extend({'case':case,'branch':branch} for branch in BRANCHES
+                                        if not (masks[branch]>0).any())
         for value,name in classes:
             pmask,gmask = pred == value,gt == value
             for scope,support in (("end_to_end",np.ones(ref.shape,bool)),("covered_only",coverage)):
@@ -185,6 +192,10 @@ def evaluate(manifest, partition, predictions, out, *, surface_tolerance=1., les
                         lesion_rows.extend({"case":case,**item} for item in details)
                 rows.append(record)
             for index,branch in enumerate(BRANCHES):
+                # No reference support means no defensible branch attribution.
+                # Keep case-level scoring but do not count this as a healthy branch.
+                if not (masks[branch]>0).any():
+                    continue
                 g = masks[branch] == (1 if name == "lumen" else 2)
                 branch_coords = coords[assigned == index]
                 p = np.zeros(ref.shape,bool)
@@ -210,6 +221,8 @@ def evaluate(manifest, partition, predictions, out, *, surface_tolerance=1., les
         excluded_calibration_ids=sorted(excluded),surface_tolerance_mm=surface_tolerance,lesion_match_min_iou=lesion_iou,
         lesion_matching="26-connectivity, one-to-one maximum cardinality then IoU, positive overlap required",
         branch_attribution="Evaluation-only nearest annotated branch in physical space. Distant false positives remain assigned.",
-        empty_gt_dice="null, healthy branches reported separately")
+        empty_gt_dice="null, healthy branches reported separately",
+        unevaluable_empty_reference_branches=empty_reference_branches,
+        empty_branch_policy="Case-level scores retained; empty reference branches excluded from branch-specific attribution and specificity")
     write_json(out/"summary.json",summary)
     return summary
