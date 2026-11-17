@@ -93,7 +93,7 @@ class FFRUNet3D(BaseLumenModel):
     """
 
     def __init__(self, in_channels: int = 1, base_filters: int = 32,
-                 transition_ratio: float = 1.5):
+                 transition_ratio: float = 1.5, out_channels: int = 1):
         super().__init__()
         stage_depths = [base_filters * (2 ** i) for i in range(4)]  # [32, 64, 128, 256]
         self.pool = nn.MaxPool3d(2)
@@ -126,7 +126,7 @@ class FFRUNet3D(BaseLumenModel):
             self.dec_res.append(ResidualBlock(skip_ch))
             dec_ch = skip_ch
 
-        self.head = nn.Conv3d(dec_ch, 1, 1)  # raw single-channel logit
+        self.head = nn.Conv3d(dec_ch, out_channels, 1)
 
     def forward(self, x: torch.Tensor) -> dict:
         skips = []

@@ -25,6 +25,9 @@ dependencies = [
     "openpyxl",
 ]
 
+[project.optional-dependencies]
+plaque = ["nibabel>=5", "surface-distance>=0.1"]
+
 [tool.setuptools]
 py-modules = ["train", "inference", "evaluate"]
 
@@ -36,5 +39,9 @@ include = [
     "models*",
     "postprocessing*",
     "preprocessing*",
+    "plaque_benchmark*",
     "utils*",
 ]
+
+[tool.setuptools.package-data]
+plaque_benchmark = ["configs/*.json"]

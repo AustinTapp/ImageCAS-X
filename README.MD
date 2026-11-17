@@ -345,3 +345,7 @@ python -m models.nnunet.data_prep -c configs/<method_name>.json --nnunet-data-fo
 
 Please also cite the source works for any method you use.
 
+
+## SHK lumen and plaque benchmark
+
+See [setup and commands](docs/PLAQUE_BENCHMARK.md) and [verification status](docs/PLAQUE_IMPLEMENTATION_STATUS.md) for the restored benchmark extension.

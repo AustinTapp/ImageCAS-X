@@ -148,14 +148,14 @@ class MSFA(nn.Module):
     gates the current scale by a conv over concat(current, upsampled aggregate), then
     adds that aggregate back directly."""
 
-    def __init__(self, in_channels_list):
+    def __init__(self, in_channels_list, classes=2):
         super().__init__()
         self.compress = nn.ModuleList([nn.Conv3d(c, 8, kernel_size=1) for c in in_channels_list])
         self.att_convs = nn.ModuleList([
             nn.Conv3d(16, 8, kernel_size=3, padding=1) for _ in range(len(in_channels_list) - 1)
         ])
         self.sigmoid = nn.Sigmoid()
-        self.out_conv = nn.Conv3d(8, 2, kernel_size=3, padding=1)
+        self.out_conv = nn.Conv3d(8, classes, kernel_size=3, padding=1)
 
     def forward(self, features):
         # Smallest spatial scale first.
@@ -177,8 +177,6 @@ class CASNet3D(BaseLumenModel):
 
     def __init__(self, classes: int = 2, channels: int = 1):
         super().__init__()
-        # `classes` is accepted to match the reference signature but unused: the
-        # official code also hardcodes 2 output channels in MSFA.out_conv.
         self.enc_input = ResEncoder3d(channels, 16)
         self.encoder1 = ResEncoder3d(16, 32)
         self.encoder2 = ResEncoder3d(32, 64)
@@ -204,7 +202,7 @@ class CASNet3D(BaseLumenModel):
         self.decoder1 = Decoder3d(32, 16)
         self.deconv1 = deconv(32, 16)
 
-        self.msfa = MSFA([128, 64, 32, 16])
+        self.msfa = MSFA([128, 64, 32, 16], classes=classes)
 
         initialize_weights(self)
 
