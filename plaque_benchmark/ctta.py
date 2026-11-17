@@ -111,7 +111,7 @@ class NNUNetCTTA:
             raise ValueError('CTTA nnU-Net adapter requires one CT channel and one scalar CPU segmentation')
         hu=image[0].numpy()*self.std+self.mean
         label=seg[0].numpy()
-        seed=int(np.random.randint(0,2**32-1))
+        seed = int(np.random.randint(0, 2 ** 32 - 1, dtype=np.int64))
         x,y,_=augment_hu(hu,label,self.spacing,self.config,seed,axes='zyx',ignore=-1)
         data['image']=torch.from_numpy(((x-self.mean)/self.std)[None]).to(image.dtype)
         data['segmentation']=torch.from_numpy(y[None]).to(seg.dtype)
