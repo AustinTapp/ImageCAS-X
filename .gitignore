@@ -19,3 +19,9 @@ dist/
 *.pt
 *.pth
 *.npy
+
+# Images and configuration files
+*.nii.gz
+*.json
+*.png
+*.stl
