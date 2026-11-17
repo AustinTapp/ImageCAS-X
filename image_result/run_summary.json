@@ -1,0 +1,133 @@
+{
+  "repo_root": "D:\\Code\\ImageCAS-X",
+  "checkpoint_dir": "D:\\Code\\ImageCAS-X\\model_ckpts",
+  "input_dir": "D:\\Code\\ImageCAS-X\\image_input",
+  "output_dir": "D:\\Code\\ImageCAS-X\\image_result",
+  "expected_cases": 1,
+  "input_cases": [
+    "5 75.0%.nii.gz"
+  ],
+  "checkpoint_files": [
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\ade_htl\\ade_htl_stage1.pt",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\ade_htl\\ade_htl_stage2.pt",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\cas_net.pt",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\cas_net_best.pt",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\ffr_unet.pt",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\imagecas\\imagecas_stage2_coarse_dilated.pt",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\imagecas\\imagecas_stage3_patch_16.pt",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\imagecas\\imagecas_stage3_patch_32.pt",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\imagecas\\imagecas_stage3_patch_64.pt",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\nnunet\\nnUNetTrainer__nnUNetPlans__3d_fullres\\fold_0\\checkpoint_best.pth",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\nnunet\\nnUNetTrainer__nnUNetPlans__3d_fullres\\fold_1\\checkpoint_best.pth",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\nnunet\\nnUNetTrainer__nnUNetPlans__3d_fullres\\fold_2\\checkpoint_best.pth",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\nnunet\\nnUNetTrainer__nnUNetPlans__3d_fullres\\fold_3\\checkpoint_best.pth",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\nnunet\\nnUNetTrainer__nnUNetPlans__3d_fullres\\fold_4\\checkpoint_best.pth",
+    "D:\\Code\\ImageCAS-X\\model_ckpts\\swin_unetr.pt"
+  ],
+  "checkpoint_candidates": {
+    "cas_net": [
+      "cas_net.pt [score=120]",
+      "cas_net_best.pt [score=120]"
+    ],
+    "ffr_unet": [
+      "ffr_unet.pt [score=120]"
+    ],
+    "swin_unetr": [
+      "swin_unetr.pt [score=120]"
+    ],
+    "imagecas_stage1_coarse": [],
+    "imagecas_stage2_coarse_dilated": [
+      "imagecas\\imagecas_stage2_coarse_dilated.pt [score=120]"
+    ],
+    "imagecas_stage3_patch_16": [
+      "imagecas\\imagecas_stage3_patch_16.pt [score=120]"
+    ],
+    "imagecas_stage3_patch_32": [
+      "imagecas\\imagecas_stage3_patch_32.pt [score=120]"
+    ],
+    "imagecas_stage3_patch_64": [
+      "imagecas\\imagecas_stage3_patch_64.pt [score=120]"
+    ],
+    "ade_htl_stage1_coarse": [],
+    "ade_htl": [
+      "ade_htl\\ade_htl_stage1.pt [score=105]",
+      "ade_htl\\ade_htl_stage2.pt [score=105]"
+    ]
+  },
+  "plan": [
+    {
+      "name": "cas_net",
+      "kind": "final",
+      "config": "D:\\Code\\ImageCAS-X\\configs\\cas_net.json",
+      "checkpoint": "D:\\Code\\ImageCAS-X\\model_ckpts\\cas_net.pt",
+      "staged_checkpoints": null
+    },
+    {
+      "name": "ffr_unet",
+      "kind": "final",
+      "config": "D:\\Code\\ImageCAS-X\\configs\\ffr_unet.json",
+      "checkpoint": "D:\\Code\\ImageCAS-X\\model_ckpts\\ffr_unet.pt",
+      "staged_checkpoints": null
+    },
+    {
+      "name": "swin_unetr",
+      "kind": "final",
+      "config": "D:\\Code\\ImageCAS-X\\configs\\swin_unetr.json",
+      "checkpoint": "D:\\Code\\ImageCAS-X\\model_ckpts\\swin_unetr.pt",
+      "staged_checkpoints": null
+    }
+  ],
+  "skipped": {
+    "imagecas_baseline": "missing staged checkpoint(s): imagecas_stage1_coarse",
+    "ade_htl": "final ADE-HTL checkpoint detected, but final inference requires TotalSegmentator heartchambers_highres / ADE auxiliary inputs; image_input alone is insufficient"
+  },
+  "results": {
+    "cas_net": {
+      "status": "ok",
+      "kind": "final",
+      "config": "D:\\Code\\ImageCAS-X\\configs\\cas_net.json",
+      "checkpoint": "D:\\Code\\ImageCAS-X\\model_ckpts\\cas_net.pt",
+      "staged_checkpoints": null,
+      "output_dir": "D:\\Code\\ImageCAS-X\\image_result\\cas_net",
+      "expected_predictions": 1,
+      "predictions_present": 1,
+      "newly_forwarded": 1,
+      "missing_predictions": [],
+      "errors": {},
+      "elapsed_seconds": 67.60876780000035
+    },
+    "ffr_unet": {
+      "status": "ok",
+      "kind": "final",
+      "config": "D:\\Code\\ImageCAS-X\\configs\\ffr_unet.json",
+      "checkpoint": "D:\\Code\\ImageCAS-X\\model_ckpts\\ffr_unet.pt",
+      "staged_checkpoints": null,
+      "output_dir": "D:\\Code\\ImageCAS-X\\image_result\\ffr_unet",
+      "expected_predictions": 1,
+      "predictions_present": 1,
+      "newly_forwarded": 1,
+      "missing_predictions": [],
+      "errors": {},
+      "elapsed_seconds": 228.79516259999946
+    },
+    "swin_unetr": {
+      "status": "ok",
+      "kind": "final",
+      "config": "D:\\Code\\ImageCAS-X\\configs\\swin_unetr.json",
+      "checkpoint": "D:\\Code\\ImageCAS-X\\model_ckpts\\swin_unetr.pt",
+      "staged_checkpoints": null,
+      "output_dir": "D:\\Code\\ImageCAS-X\\image_result\\swin_unetr",
+      "expected_predictions": 1,
+      "predictions_present": 1,
+      "newly_forwarded": 1,
+      "missing_predictions": [],
+      "errors": {},
+      "elapsed_seconds": 186.9991207000021
+    }
+  },
+  "notes": [
+    "Final ADE-HTL is excluded from image-only inference because the repository requires TotalSegmentator heartchambers_highres / ADE auxiliary inputs.",
+    "nnU-Net, nnU-Net+clDice, and TotalSegmentator are external methods in ImageCAS-X and are not loaded by the repository's internal model registry."
+  ],
+  "total_elapsed_seconds": 485.2677358000001
+}

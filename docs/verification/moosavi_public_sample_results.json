@@ -1,0 +1,20 @@
+{
+  "verification_session": "Earlier delivery in this conversation. Historical results restored from its recorded output.",
+  "protocol": "Released fold_0 checkpoint_final.pth, original public arrays, mirroring disabled, raw output, global plaque Dice",
+  "sample_independence": "unknown",
+  "reconstruction_equivalence": "unverified",
+  "results": [
+    {
+      "sample": "P01_CX_axial",
+      "dice": 0.816195856873823
+    },
+    {
+      "sample": "P01_LAD_axial",
+      "dice": 0.7231608252927043
+    },
+    {
+      "sample": "P01_RCA_axial",
+      "dice": 0.6075388026607539
+    }
+  ]
+}

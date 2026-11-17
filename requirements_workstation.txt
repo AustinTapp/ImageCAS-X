@@ -1,0 +1,5 @@
+# Preserve the already-working CUDA PyTorch installation. Do not use --upgrade.
+ctaug @ git+https://github.com/AustinTapp/CTTA_Aug.git@7fbebab4d391f45432f92e8374adaa2770d986eb
+optuna>=4.3,<6
+psutil>=5.9
+tqdm>=4.66

@@ -1,0 +1,20 @@
+{
+  "patch": [
+    32,
+    32,
+    96
+  ],
+  "model_params": {
+    "filters": [
+      16,
+      32,
+      64,
+      128
+    ]
+  },
+  "sampling": {
+    "plaque": 0.35,
+    "healthy": 0.2,
+    "foreground": 0.25
+  }
+}

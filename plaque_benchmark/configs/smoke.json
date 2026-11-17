@@ -1,0 +1,28 @@
+{
+  "seed": 2028,
+  "patch": [
+    64,
+    64,
+    64
+  ],
+  "epochs": 5,
+  "steps": 2,
+  "batch_size": 1,
+  "accumulate": 1,
+  "validation_patches": 4,
+  "inference_batch": 1,
+  "inference_overlap": 0.5,
+  "workers": 0,
+  "cache_cases": 1,
+  "patience": 0,
+  "lr": 0.0003,
+  "weight_decay": 0.0001,
+  "amp": true,
+  "loss": "dice_ce",
+  "sampling": {
+    "plaque": 0.35,
+    "healthy": 0.15,
+    "foreground": 0.25
+  },
+  "max_vram_gib": 22.0
+}

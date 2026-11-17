@@ -1,0 +1,33 @@
+{
+  "reissue": "Source rebuilt from the implementation in this conversation.",
+  "tests": {
+    "native": {
+      "tests": 27,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "vmtk": {
+      "tests": 4,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "primary_runtime": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cpu",
+    "monai": "1.6.1",
+    "nibabel": "5.5.0",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "vmtk_runtime": {
+    "python": "3.11.8",
+    "vmtk": "1.5.0",
+    "vtk": "9.2.6"
+  },
+  "private_shk_testing": "pending",
+  "windows_cuda_testing": "pending",
+  "moosavi_geometry_parity": "unverified"
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "url": "https://drive.google.com/uc?id=1JfDJoppjN6ASjA5gu9LoyqzvqjpwXS6p",
+    "path": "Sample_Dataset/Images/P01_LAD_axial_0000.nii.gz"
+  },
+  {
+    "url": "https://drive.google.com/uc?id=1frGrE9HjeMM3B9Ew4Z3XC5EMN3EtkvL9",
+    "path": "Sample_Dataset/Images/P01_RCA_axial_0000.nii.gz"
+  },
+  {
+    "url": "https://drive.google.com/uc?id=15iAFVWv4b3MX1Syh9l2S-Tr7q4tdhwWR",
+    "path": "Sample_Dataset/Images/P01_CX_axial_0000.nii.gz"
+  },
+  {
+    "url": "https://drive.google.com/uc?id=1aHs1VldO95rLksNTueWnsBRIeM6pCC-C",
+    "path": "Sample_Dataset/Labels/P01_LAD_axial.nii.gz"
+  },
+  {
+    "url": "https://drive.google.com/uc?id=13xTrl3u0vc8y8sJVx0CyZsWB7fNG978r",
+    "path": "Sample_Dataset/Labels/P01_RCA_axial.nii.gz"
+  },
+  {
+    "url": "https://drive.google.com/uc?id=10NzoqqL1AlYaYvYzwP_ggrqtYgYgBb0j",
+    "path": "Sample_Dataset/Labels/P01_CX_axial.nii.gz"
+  },
+  {
+    "url": "https://drive.google.com/uc?id=1hi-PcMoAt9hgeMncsnQaVWIw7iUIhYnI",
+    "path": "Dataset001_CCTA_DHM/nnUNetTrainer__nnUNetPlans__3d_fullres/fold_0/checkpoint_final.pth"
+  },
+  {
+    "url": "https://drive.google.com/uc?id=1iWyfLSVGkPvCXdeZmxWnLWf7ThJ-vzE1",
+    "path": "Dataset001_CCTA_DHM/nnUNetTrainer__nnUNetPlans__3d_fullres/plans.json"
+  },
+  {
+    "url": "https://drive.google.com/uc?id=1XWHDJ6FGiDc9Hm57g3_XqFopZxr1g-ni",
+    "path": "Dataset001_CCTA_DHM/nnUNetTrainer__nnUNetPlans__3d_fullres/dataset.json"
+  }
+]

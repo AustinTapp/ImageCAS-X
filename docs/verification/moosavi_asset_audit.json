@@ -1,0 +1,58 @@
+{
+  "verification_session": "Earlier delivery session, historical fields restored from recorded output",
+  "architecture": "PlainConvUNet",
+  "reader": "SimpleITKIO",
+  "patch_in_reader_order": [
+    48,
+    48,
+    48
+  ],
+  "spacing_in_reader_order": [
+    1,
+    1,
+    1
+  ],
+  "normalization": [
+    "CTNormalization"
+  ],
+  "labels": {
+    "background": 0,
+    "normal_vessel": 1,
+    "plaque": 2
+  },
+  "training_foreground_intensity": {
+    "mean": 1217.8577880859375,
+    "percentile_00_5": 879.0,
+    "percentile_99_5": 1875.0,
+    "std": 220.82827758789062
+  },
+  "samples": [
+    {
+      "name": "P01_CX_axial_0000.nii.gz",
+      "shape_xyz": [
+        44,
+        44,
+        139
+      ]
+    },
+    {
+      "name": "P01_LAD_axial_0000.nii.gz",
+      "shape_xyz": [
+        44,
+        44,
+        379
+      ]
+    },
+    {
+      "name": "P01_RCA_axial_0000.nii.gz",
+      "shape_xyz": [
+        44,
+        44,
+        290
+      ]
+    }
+  ],
+  "sample_affine": "identity",
+  "geometry_parity": "unverified",
+  "intensity_offset": "unverified"
+}

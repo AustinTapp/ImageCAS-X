@@ -1,0 +1,11 @@
+{
+  "verification_session": "Earlier delivery session, restored historical record",
+  "trainer": "nnUNetTrainerSHK5",
+  "epochs": 5,
+  "steps_per_epoch": 100,
+  "preprocessor": "DefaultPreprocessor",
+  "network": "PlainConvUNet",
+  "test": "One CPU optimizer step on a released public Moosavi sample",
+  "loss": 1.2588485479354858,
+  "nnunet_version": "2.8.1"
+}

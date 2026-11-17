@@ -1,0 +1,9 @@
+{
+  "batch_size": 4,
+  "accumulate": 8,
+  "workers": 4,
+  "cache_build_workers": 4,
+  "prefetch_factor": 2,
+  "cache_cases": 24,
+  "max_vram_gib": 22.0
+}
