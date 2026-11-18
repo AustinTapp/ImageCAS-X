@@ -38,12 +38,13 @@ def parser():
     p.add_argument("--split",default=f"{DEFAULT}/split.json")
     p.add_argument("--out",default=f"{DEFAULT}/prepared")
     p = stage("train",dataset=True)
-    p.add_argument("--model",choices=("cas_net","ffr_unet","swin_unetr","dynunet"),required=True)
+    p.add_argument("--model",choices=("cas_net","ffr_unet","swin_unetr","dynunet","swin_unetr_v2","mednext"),required=True)
     p.add_argument("--task",choices=tuple(TASKS),default="multiclass")
     p.add_argument("--profile",choices=("smoke","screen","focused"),default="screen")
     p.add_argument("--config")
     p.add_argument("--out",required=True)
     p.add_argument("--resume",action="store_true")
+    p.add_argument("--stop-after-epoch", type=int, help="Pause at this epoch while preserving the full scheduler horizon.")
     p.add_argument("--initialize")
     p.add_argument("--device")
     p = stage("infer",dataset=True,partition=True)
@@ -203,7 +204,7 @@ def main(argv=None):
     elif stage == "train":
         from .native import config_for, train
         train(manifest,args.task,config_for(args.model,args.profile,args.config),args.out,
-              device=args.device,resume=args.resume,initialize=args.initialize)
+              device=args.device,resume=args.resume,initialize=args.initialize,stop_after_epoch=args.stop_after_epoch)
     elif stage == "infer":
         from .native import infer
         guard(manifest,args.partition,args.frozen,file_sha256(args.checkpoint))

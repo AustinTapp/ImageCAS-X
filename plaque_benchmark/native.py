@@ -34,6 +34,9 @@ CLASS_ARGUMENT = {"cas_net": "classes", "ffr_unet": "out_channels", "swin_unetr"
 
 
 def build(name, task, params=None):
+    if name in {"swin_unetr_v2", "mednext"}:
+        from .round2_models import build as build_extra
+        return build_extra(name, TASKS[task], params or {})
     if name == "dynunet":
         from monai.networks.nets import DynUNet
 
@@ -267,7 +270,7 @@ def _validate_settings(config, task):
     if config.get("loss") == "cldice" and task not in {"lumen", "multiclass"}:
         raise ValueError("clDice requires a lumen target.")
     patch = np.asarray(config["patch"])
-    factor = {"cas_net":16, "ffr_unet":8, "swin_unetr":32, "dynunet":8}[config["model"]]
+    factor = {"cas_net":16, "ffr_unet":8, "swin_unetr":32, "dynunet":8, "swin_unetr_v2":32, "mednext":16}[config["model"]]
     if patch.shape != (3,) or (patch < 2*factor).any() or (patch % factor).any():
         raise ValueError(f"Patch dimensions must be >= {2*factor} and divisible by {factor}.")
     for key in ("epochs","steps","batch_size","accumulate","validation_patches","inference_batch"):
@@ -313,7 +316,7 @@ def _history_files(out, history):
     plt.close(fig)
 
 
-def train(manifest, task, config, out, *, device=None, resume=False, initialize=None, epoch_callback=None):
+def train(manifest, task, config, out, *, device=None, resume=False, initialize=None, epoch_callback=None, stop_after_epoch=None):
     _validate_settings(config, task)
     if config.get('augmentation'):
         from .ctta import settings
@@ -346,7 +349,14 @@ def train(manifest, task, config, out, *, device=None, resume=False, initialize=
         if any(state["config"][key] != cfg[key] for key in ("model","task","split_sha256","dataset_sha256")):
             raise ValueError("Initialization architecture/task/data mismatch.")
         model.load_state_dict(state["model"])
-    optimizer = torch.optim.AdamW(model.parameters(), lr=config["lr"], weight_decay=config["weight_decay"])
+    optimizer_name = config.get("optimizer", "adamw")
+    options = dict(lr=config["lr"], weight_decay=config["weight_decay"])
+    if optimizer_name == "adamw":
+        optimizer = torch.optim.AdamW(model.parameters(), **options)
+    elif optimizer_name == "sgd_nesterov":
+        optimizer = torch.optim.SGD(model.parameters(), momentum=.9, nesterov=True, **options)
+    else:
+        raise ValueError(f"Unsupported optimizer: {optimizer_name}")
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=config["epochs"])
     bf16 = device.type == "cuda" and config["amp"] and torch.cuda.is_bf16_supported()
     names = {"lumen":("lumen",), "plaque":("plaque",), "multiclass":("lumen","plaque"),
@@ -381,7 +391,10 @@ def train(manifest, task, config, out, *, device=None, resume=False, initialize=
     val = loader(val_rows, max(config["validation_patches"],len(val_rows)), config["seed"]+10000, False)
     patches = config["steps"]*config["batch_size"]*config["accumulate"]
     batches = loader(training_rows, patches, config["seed"], True)
-    for epoch in range(first,config["epochs"]):
+    limit = config["epochs"] if stop_after_epoch is None else stop_after_epoch
+    if not 1 <= limit <= config["epochs"]:
+        raise ValueError("Stop epoch outside configured training horizon.")
+    for epoch in range(first, limit):
         if config["patience"] and stalled >= config["patience"]:
             break
         seed_everything(config["seed"]+epoch+1)
@@ -446,7 +459,7 @@ def train(manifest, task, config, out, *, device=None, resume=False, initialize=
         score = float(np.mean(defined)) if task == "branch_lumen" and defined else dices[-1]
         value = score if score is not None else -row["val_patch_loss"]
         improved,best = value > best,max(best,value)
-        stalled = 0 if improved else stalled+1
+        stalled = 0 if improved or epoch+1 <= config.get("early_stopping_start_epoch", 0) else stalled+1
         state = {"model":model.state_dict(),"optimizer":optimizer.state_dict(),"scheduler":scheduler.state_dict(),
                  "config":cfg,"epoch":epoch+1,"history":history,"best":best,"stalled":stalled}
         if improved:

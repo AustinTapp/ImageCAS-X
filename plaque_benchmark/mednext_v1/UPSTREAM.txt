@@ -1,0 +1,5 @@
+MedNeXt by the upstream authors, https://github.com/MIC-DKFZ/MedNeXt
+Source commit 0b78ed869fbd1cc2fd38754d2f8519f1b72d43ba
+Original directory: nnunet_mednext/network_architecture/mednextv1
+License: Apache License 2.0, included in LICENSE.
+The PlaquePilot copy changes the two architecture imports to package-relative imports.
